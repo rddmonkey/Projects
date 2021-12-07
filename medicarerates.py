@@ -1,4 +1,3 @@
-
 from openpyxl import Workbook, load_workbook, worksheet
 
 wb = load_workbook("medicare 2022 area 18.xlsx")
@@ -10,14 +9,14 @@ cptlist = []
 for x in range(10,11048 + 1):
     cptlist.append(ws[f"B{str(x)}"].value)
 
-print("Please enter a CPT")
+print("Please enter a CPT:")
 cpt = input()
 
 while cpt not in cptlist:
     print(f"Please enter a valid CPT!")
     cpt = input()
 
-print("Please enter a Place of Service number")
+print("Please enter a Place of Service number:")
 pos = input()
 
 while int(pos) not in poslist:
@@ -31,15 +30,17 @@ rate = rate/100
 def medicare2022rates(cpt,pos, rate):
     #Based on CPT and POS, returns rate 2022 Medicare rates area 18, Par Amount
     pos = int(pos)
-    possiblevalues = []
+    possiblevalues = float('inf')
     for row in range(10,11048 + 1):
         if ws[f"B{str(row)}"].value == cpt:
             price = ws[f"D{str(row)}"].value
-            possiblevalues.append(price)
+            if pos != 22 and pos != 24:
+                possiblevalues = price
+                break
+            if pos == 22 or pos == 24:
+                if price < possiblevalues:
+                    possiblevalues = price
 
-    if pos == 22 or pos == 24:
-        return f"CPT {cpt} rate is ${min(possiblevalues)*rate:.2f}"
-
-    return f"CPT {cpt} rate is ${max(possiblevalues)*rate:.2f}"
+    return f"CPT {cpt} rate is ${possiblevalues*rate:.2f}"
 
 print(medicare2022rates(cpt,pos,rate))
