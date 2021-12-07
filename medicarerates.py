@@ -4,10 +4,7 @@ wb = load_workbook("medicare 2022 area 18.xlsx")
 ws = wb.active
 
 poslist = [i for i in range(1,100)]
-cptlist = []
-
-for x in range(10,11048 + 1):
-    cptlist.append(ws[f"B{str(x)}"].value)
+cptlist = [ws[f"B{str(x)}"].value for x in range(10,11048 + 1)]
 
 print("Please enter a CPT:")
 cpt = input()
@@ -21,7 +18,7 @@ pos = input()
 
 while int(pos) not in poslist:
     print(f"{pos} is an invalid POS. Please enter a value POS")
-    pos = input()
+    pos = int(input())
 
 print("Please enter the rate paid!")
 rate = int(input())
