@@ -1,0 +1,17 @@
+from bs4 import BeautifulSoup
+import requests
+import time
+
+def get_cypto_price(coin):
+    #Find the price of a CyptoCurrency
+    url = f"https://coinmarketcap.com/currencies/{coin}/"
+
+    HTML = requests.get(url)
+
+    soup = BeautifulSoup(HTML.text,'html.parser')
+
+    text = soup.find("div","priceValue").text
+
+    return text
+
+print(get_cypto_price("cardano"))
